@@ -12,7 +12,7 @@ export const generalFields = {
         "accept-encoding" : joi.string(),
         connection : joi.string(),
         token : joi.string().required() 
-    }) ,
+    }).unknown(true), 
     file : joi.object({
         size : joi.number().positive().required(),
         path : joi.string().required(),
