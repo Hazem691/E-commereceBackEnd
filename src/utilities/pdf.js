@@ -15,7 +15,7 @@ export async function createInvoice(invoice, path) {
 
 function generateHeader(doc) {
   doc
-    .image("shopLogo.png", 50, 45, { width: 50 })
+  
     .fillColor("#444444")
     .fontSize(20)
     .text("iShopy commerce", 110, 57)
