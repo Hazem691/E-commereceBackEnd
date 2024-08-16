@@ -20,7 +20,7 @@ export const validation = (validateApi) => {
 
             next();
         } catch (error) {
-            console.error('Validation middleware error:', error);
+            
             return res.status(500).json({ msg: "Internal Server Error" });
         }
     };

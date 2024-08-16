@@ -52,7 +52,7 @@ export const updateBrand = asyncHandler(async(req,res,next)=>{
     const {name} = req.body ;
     const {id} = req.params ;
     const brand = await brandModel.findOne({_id : id , createdBy : req.user._id});
-    console.log(brand);
+    
     if(!brand){
         return next(new AppError("brand is not exist ...",404)) ;
     }

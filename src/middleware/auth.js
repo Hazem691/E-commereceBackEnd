@@ -12,24 +12,25 @@ export const auth = () => {
             }
 
             const decoded = jwt.verify(token,process.env.signatureKey);
-             console.log(decoded);
+           
             if (!decoded) {
                 return res.status(401).json({ msg: "Invalid payload" });
             }
 
-            console.log("Decoded token:", decoded);
+            
 
             const user = await userModel.findOne({email:decoded.email});
-             console.log(user);
+
             if (!user) {
                 return res.status(404).json({ msg: "User not found" });
             }
-            if(parseInt(user.passwordChangedAt.getTime()/1000) > decoded.iat ){
+
+            if(parseInt(user?.passwordChangedAt?.getTime()/1000) > decoded.iat ){
                 return res.json({msg : "Token has expired please loggin again ......"}) ;
             }
 
             req.user = user;
-            console.log("Authenticated user:", req.user);
+            
             next();
         } catch (err) {
             console.error('Error authenticating user:', err);

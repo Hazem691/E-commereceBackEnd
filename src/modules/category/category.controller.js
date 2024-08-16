@@ -33,7 +33,7 @@ export const createCategory = asyncHandler(async (req,res,next)=>{
     }
 
     const { secure_url, public_id } = uploadResult;
-
+    req.filePath = `EcommerceC42/Categories/${customId}` ;
     const category = await categoryModel.create({
         name , 
         slug : slugify(name , {
@@ -44,7 +44,10 @@ export const createCategory = asyncHandler(async (req,res,next)=>{
         createdBy :req.user._id ,
         customId : customId ,
     }) ;
-
+     req.data = {
+        model : categoryModel ,
+        id : category._id ,
+     }
     res.json({msg : "done" , category}) ;
 
 })
@@ -59,7 +62,7 @@ export const updateCategory = asyncHandler(async(req,res,next)=>{
     const {name} = req.body ;
     const {id} = req.params ;
     const category = await categoryModel.findOne({_id : id , createdBy : req.user._id});
-    console.log(category);
+    
     if(!category){
         return next(new AppError("Category is not exist ...",404)) ;
     }
@@ -80,7 +83,7 @@ export const updateCategory = asyncHandler(async(req,res,next)=>{
         await cloudinary.uploader.destroy(category.image.public_id) ;
      let uploadResult;
      try {
-        uploadResult = await cloudinary.uploader.upload( req.file.path , {
+         uploadResult = await cloudinary.uploader.upload( req.file.path , {
             folder: `EcommerceC42/Categories/${category.customId}`
         });
     } catch (err) {
@@ -88,6 +91,7 @@ export const updateCategory = asyncHandler(async(req,res,next)=>{
     }
 
     const { secure_url, public_id } = uploadResult;
+    category.image = { secure_url, public_id };
     }
     await category.save();
     res.json({msg :"done",category}) ;
@@ -113,10 +117,9 @@ export const getCategories = asyncHandler(async (req, res, next) => {
 export const deleteCategory = asyncHandler(async (req, res, next) => {
 
     const {id} = req.params ;
-    console.log(`Category ID: ${id}`);
-    console.log(`owner ID: ${req.user._id}`);
+    
     const category = await categoryModel.findOneAndDelete({_id :id , createdBy : req.user._id }) ;
-    console.log(category);
+    
     if(!category){
         return next(new AppError("Category is not exist or you don't have permission"))
     }

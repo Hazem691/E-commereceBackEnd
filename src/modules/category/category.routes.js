@@ -15,6 +15,8 @@ const router = Router() ;
 
 router.use('/:categoryId/subcategories',subcategoryRouter);
 
+
+
 router.get('/',auth(),authorization(["admin","user"]),getCategories);
 
 

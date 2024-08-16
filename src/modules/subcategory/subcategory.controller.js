@@ -12,30 +12,30 @@ import slugify from "slugify";
 export const createSubcategory = asyncHandler(async (req, res, next) => {
     const { name } = req.body;
     const categoryExist = await categoryModel.findById(req.params.categoryId);
-    console.log(categoryExist);
+    
     if (!categoryExist) {
-        return next(new AppError('Category is not Exist ....'));
+        return next(new AppError('Category does not exist.'));
     }
     const subCategoryExist = await subCategoryModel.findOne({ name: name.toLowerCase() });
     if (subCategoryExist) {
-        return next(new AppError('Subcategory already Exist ....'));
+        return next(new AppError('Subcategory already exists.'));
     }
     if (!req.file) {
-        return next(new AppError('image is required .....'));
+        return next(new AppError('Image is required.'));
     }
-    const customId = nanoid(5);
+    const customId = nanoid(5) ;
     let uploadResult;
     try {
-
-        uploadResult = await cloudinary.uploader.upload(req.file.path, {
-            folder: `EcommerceC42/Categories/${categoryExist.customId}/subCategories/${customId}`
+        uploadResult = await cloudinary.uploader.upload( req.file.path , {
+            folder: `EcommerceC42/Categories/${categoryExist.customId}/Subcategories/${customId}`
         });
     } catch (err) {
         return next(new AppError('Error uploading to Cloudinary.'));
     }
 
     const { secure_url, public_id } = uploadResult;
-    console.log(req.user._id);
+
+    
     const subCategory = await subCategoryModel.create({
         name,
         slug: slugify(name, {
@@ -49,7 +49,7 @@ export const createSubcategory = asyncHandler(async (req, res, next) => {
     });
 
     res.json({ msg: "done", subCategory });
-})
+});
 
 
 //&==================================== Update SubCategory ======================================================

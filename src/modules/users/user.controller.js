@@ -13,7 +13,7 @@ import { customAlphabet, nanoid } from "nanoid";
 
 
 export const signUp = asyncHandler(async (req, res, next) => {
-    const { name, email, password, age, phone, address } = req.body;
+    const { name, email, password, age, phone, address ,role ,passwordChangedAt } = req.body;
     const userExist = await userModel.findOne({ email: email.toLowerCase() });
     if (userExist) {
         return next(new AppError("User is already exist ..."));
@@ -31,7 +31,9 @@ export const signUp = asyncHandler(async (req, res, next) => {
           password : hash,
            age,
             phone,
-             address
+             address,
+             role,
+             passwordChangedAt: new Date()
     })
     const newUser = await user.save();
 
