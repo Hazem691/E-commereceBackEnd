@@ -19,7 +19,7 @@ export const createBrand = asyncHandler(async (req,res,next)=>{
     const customId = nanoid(5) ;
     let uploadResult;
     try {
-        uploadResult = await cloudinary.uploader.upload( req.file.path , {
+        uploadResult = await cloudinary.uploader.upload(req.file.path , {
             folder: `EcommerceC42/Brands/${customId}`
         });
     } catch (err) {

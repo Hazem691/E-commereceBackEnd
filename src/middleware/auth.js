@@ -6,7 +6,7 @@ export const auth = () => {
     return async (req, res, next) => {
         try {
             const {token} = req.headers;
-
+            
             if (!token) {
                 return res.status(401).json({ msg: "Token does not exist" });
             }
