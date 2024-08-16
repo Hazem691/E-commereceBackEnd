@@ -65,20 +65,25 @@ export const getReview = asyncHandler(async(req,res,next)=>{
 
 export const deleteReview = asyncHandler(async(req,res,next)=>{
    
-    const {id} = req.params ;
-      
-
+    const {id} = req.params ;   
     const review = await reviewModel.findOneAndDelete(
         {
             _id :id ,
             createdBy :req.user._id ,
 
         }) ;
+     
      const product = await productModel.findById(review.productId) ;
-     let sum = product.rateAvg * product.rateNum ;
-     sum = sum - review.rate ;
-     product.rateAvg = sum / (product.rateNum - 1) ;
-     product.rateNum -= 1 ;
+     if (product.rateNum > 1) {
+        let sum = product.rateAvg * product.rateNum;
+        sum = sum - review.rate;
+        product.rateAvg = sum / (product.rateNum - 1);
+        product.rateNum -= 1;
+    } else {
+        // If this was the only review, reset the rating
+        product.rateAvg = 0;
+        product.rateNum = 0;
+    }
      await product.save() ;
      res.json({msg : "done"})
 
