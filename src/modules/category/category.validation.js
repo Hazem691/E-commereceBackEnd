@@ -9,7 +9,7 @@ export const createCategoryValidation = {
     }).required(),
 
     file : generalFields.file.required() ,
-    headers : generalFields.headers.required() ,
+    headers : generalFields.headers.required().unknown(true) ,
 }
 
 export const updateCategoryValidation = {
