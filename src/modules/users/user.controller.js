@@ -4,7 +4,7 @@ import { asyncHandler } from "../../utilities/asyncHandler.js";
 import { AppError } from "../../utilities/classError.js";
 
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { customAlphabet, nanoid } from "nanoid";
 
 
